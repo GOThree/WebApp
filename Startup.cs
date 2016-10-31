@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using WebApp.Data;
-using WebApp.Models;
-using WebApp.Services;
+using WebApp.API.Data;
+using WebApp.API.Models;
+using WebApp.API.Services;
 
-namespace WebApp
+namespace WebApp.API
 {
     public class Startup
     {

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OpenIddict;
-using WebApp.Models;
+using WebApp.API.Models;
 
-namespace WebApp.Data
+namespace WebApp.API.Data
 {
     public class ApplicationDbContext : OpenIddictDbContext<ApplicationUser>
     {

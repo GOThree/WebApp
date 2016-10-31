@@ -10,9 +10,9 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict;
-using WebApp.Models;
+using WebApp.API.Models;
 
-namespace WebApp.Controllers
+namespace WebApp.API.Controllers
 {
     public class AuthorizationController : Controller
     {

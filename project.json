@@ -98,6 +98,6 @@
     ]
   },
   "tooling": {
-    "defaultNamespace": "WebApp"
+    "defaultNamespace": "WebApp.API"
   }
 }

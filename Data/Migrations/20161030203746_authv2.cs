@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace WebApp.Data.Migrations
+namespace WebApp.API.Data.Migrations
 {
     public partial class authv2 : Migration
     {

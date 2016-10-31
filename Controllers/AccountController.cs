@@ -12,11 +12,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using OpenIddict;
-using WebApp.Models;
-using WebApp.Models.AccountViewModels;
-using WebApp.Services;
+using WebApp.API.Models;
+using WebApp.API.Models.AccountViewModels;
+using WebApp.API.Services;
 
-namespace WebApp.Controllers
+namespace WebApp.API.Controllers
 {
     [Authorize]
     public class AccountController : Controller
