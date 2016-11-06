@@ -86,6 +86,37 @@ namespace WebApp.API.Controllers
             return BadRequest(ModelState);
         }
 
+        [HttpPost("forgotPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(model.Email);
+                if (user != null)
+                {
+                    var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    //TODO: Move to service/generator
+                    string callbackUrl = GenerateResetUrl(user.Id, code);
+                    //TODO: Move to service/generator
+                    string emailBody = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>";
+                    await _emailSender.SendEmailAsync(model.Email, "Reset Password", emailBody);
+                }
+            }
+            return Ok("Email to reset you password was sent!");
+        }
+
+        private string GenerateResetUrl(string userId, string code)
+        {
+            UriBuilder uriBuilder = new UriBuilder();
+            uriBuilder.Scheme = "http";
+            uriBuilder.Host = "webapp.com";
+            uriBuilder.Path = "resetPassword";
+            uriBuilder.Query = $"userId={userId}&code={code}";
+            var callbackUrl = uriBuilder.Uri.ToString();
+            return callbackUrl;
+        }
+
         //Old methods
 
         [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
@@ -349,32 +380,32 @@ namespace WebApp.API.Controllers
 
         //
         // POST: /Account/ForgotPassword
-        [HttpPost]
-        [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.FindByNameAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                {
-                    // Don't reveal that the user does not exist or is not confirmed
-                    return View("ForgotPasswordConfirmation");
-                }
+        // [HttpPost]
+        // [AllowAnonymous]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        // {
+        //     if (ModelState.IsValid)
+        //     {
+        //         var user = await _userManager.FindByNameAsync(model.Email);
+        //         if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+        //         {
+        //             // Don't reveal that the user does not exist or is not confirmed
+        //             return View("ForgotPasswordConfirmation");
+        //         }
 
-                // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
-                // Send an email with this link
-                //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                //var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
-                //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
-                //return View("ForgotPasswordConfirmation");
-            }
+        //         // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=532713
+        //         // Send an email with this link
+        //         //var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+        //         //var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+        //         //await _emailSender.SendEmailAsync(model.Email, "Reset Password",
+        //         //   $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>");
+        //         //return View("ForgotPasswordConfirmation");
+        //     }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+        //     // If we got this far, something failed, redisplay form
+        //     return View(model);
+        // }
 
         //
         // GET: /Account/ForgotPasswordConfirmation
@@ -536,7 +567,7 @@ namespace WebApp.API.Controllers
         {
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
+                ModelState.AddModelError(error.Code, error.Description);
             }
         }
 
