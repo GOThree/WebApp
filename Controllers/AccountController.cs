@@ -19,6 +19,7 @@ using WebApp.API.Services;
 namespace WebApp.API.Controllers
 {
     [Authorize]
+    [Route("account")]
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -42,7 +43,7 @@ namespace WebApp.API.Controllers
         }
 
         // POST: /Account/Register
-        [HttpPost]
+        [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
@@ -52,7 +53,7 @@ namespace WebApp.API.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return Ok();
+                    return Ok("Registration is successful");
                 }
                 AddErrors(result);
             }
@@ -62,7 +63,7 @@ namespace WebApp.API.Controllers
         }
 
         // POST: /Account/ChangePassword
-        [HttpPost]
+        [HttpPostAttribute("changePassword")]
         [Authorize]
         public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel model)
         {
