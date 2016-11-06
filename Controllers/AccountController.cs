@@ -77,7 +77,7 @@ namespace WebApp.API.Controllers
                 IdentityResult result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    return Ok("Password reset was successful");
+                    return Ok("Password was changed successfully");
                 }
                 AddErrors(result);
             }
