@@ -61,12 +61,41 @@ namespace WebApp.API.Controllers
             return BadRequest(ModelState);
         }
 
+        // POST: /Account/ChangePassword
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                if (user == null)
+                {
+                    return NotFound("User was no found!");
+                }
+                IdentityResult result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                if (result.Succeeded)
+                {
+                    return Ok("Password reset was successful");
+                }
+                AddErrors(result);
+            }
+
+            // If we got this far, something failed.
+            return BadRequest(ModelState);
+        }
+
+        //Old methods
+
         [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
         [HttpGet, Produces("application/json")]
-        public async Task<IActionResult> Userinfo() {
+        public async Task<IActionResult> Userinfo()
+        {
             var user = await _userManager.GetUserAsync(User);
-            if (user == null) {
-                return BadRequest(new OpenIdConnectResponse {
+            if (user == null)
+            {
+                return BadRequest(new OpenIdConnectResponse
+                {
                     Error = OpenIdConnectConstants.Errors.InvalidGrant,
                     ErrorDescription = "The user profile is no longer available."
                 });
@@ -77,17 +106,20 @@ namespace WebApp.API.Controllers
             // Note: the "sub" claim is a mandatory claim and must be included in the JSON response.
             claims[OpenIdConnectConstants.Claims.Subject] = user.Id.ToString();
 
-            if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIdConnectConstants.Scopes.Email)) {
+            if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIdConnectConstants.Scopes.Email))
+            {
                 claims[OpenIdConnectConstants.Claims.Email] = user.Email;
                 claims[OpenIdConnectConstants.Claims.EmailVerified] = user.EmailConfirmed;
             }
 
-            if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIdConnectConstants.Scopes.Phone)) {
+            if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIdConnectConstants.Scopes.Phone))
+            {
                 claims[OpenIdConnectConstants.Claims.PhoneNumber] = user.PhoneNumber;
                 claims[OpenIdConnectConstants.Claims.PhoneNumberVerified] = user.PhoneNumberConfirmed;
             }
 
-            if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIddictConstants.Scopes.Roles)) {
+            if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIddictConstants.Scopes.Roles))
+            {
                 claims[OpenIddictConstants.Claims.Roles] = JArray.FromObject(await _userManager.GetRolesAsync(user));
             }
 
