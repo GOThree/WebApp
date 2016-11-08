@@ -102,7 +102,7 @@ namespace WebApp.API.Controllers
                     await _emailSender.SendEmailAsync(model.Email, "Reset Password", emailBody);
                 }
             }
-            return Ok("Email to reset you password was sent!");
+            return Ok("Email to reset your password was sent!");
         }
 
         // POST: /Account/ResetPassword
@@ -140,8 +140,6 @@ namespace WebApp.API.Controllers
             var callbackUrl = uriBuilder.Uri.ToString();
             return callbackUrl;
         }
-
-        //Old methods
 
         [HttpGet("userinfo")]
         public async Task<IActionResult> Userinfo()
@@ -181,6 +179,8 @@ namespace WebApp.API.Controllers
 
             return Json(claims);
         }
+
+        //Old methods
 
         //
         // GET: /Account/Login

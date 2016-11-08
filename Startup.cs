@@ -81,6 +81,10 @@ namespace WebApp.API
 
             services.AddMvc();
 
+            services.AddApplicationInsightsTelemetry(Configuration);
+
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
@@ -91,6 +95,9 @@ namespace WebApp.API
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseApplicationInsightsRequestTelemetry();
+            app.UseApplicationInsightsExceptionTelemetry();
 
             if (env.IsDevelopment())
             {

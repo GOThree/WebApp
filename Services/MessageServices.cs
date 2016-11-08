@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MailKit.Net.Smtp;
+using MimeKit;
+using MailKit.Security;
+using Microsoft.Extensions.Options;
 
 namespace WebApp.API.Services
 {
@@ -10,10 +14,27 @@ namespace WebApp.API.Services
     // For more details see this link https://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        public Task SendEmailAsync(string email, string subject, string message)
+        private readonly EmailSettings _settings;
+
+        public AuthMessageSender(IOptions<EmailSettings> settings)
         {
-            // Plug in your email service here to send an email.
-            return Task.FromResult(0);
+            _settings = settings.Value;
+        }
+        public async Task SendEmailAsync(string email, string subject, string message)
+        {
+            var emailMessage = new MimeMessage();
+            emailMessage.From.Add(new MailboxAddress(_settings.FromFullname, _settings.FromEmail));
+            emailMessage.To.Add(new MailboxAddress(email));
+            emailMessage.Subject = subject;
+            emailMessage.Body = new TextPart("html") { Text = message };
+
+            using (var client = new SmtpClient())
+            {
+                await client.ConnectAsync(_settings.SmtpServer, 587, SecureSocketOptions.Auto);
+                await client.AuthenticateAsync(_settings.SendGridUsername, _settings.SendGridPassword);
+                await client.SendAsync(emailMessage);
+                await client.DisconnectAsync(true);
+            }
         }
 
         public Task SendSmsAsync(string number, string message)
