@@ -49,7 +49,14 @@ namespace WebApp.API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Firstname = model.Firstname,
+                    Lastname = model.Lastname
+                };
+                
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -167,6 +174,12 @@ namespace WebApp.API.Controllers
             if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIdConnectConstants.Scopes.Phone))
             {
                 claims[OpenIdConnectConstants.Claims.PhoneNumber] = user.PhoneNumber;
+            }
+
+            if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIdConnectConstants.Scopes.Profile))
+            {
+                claims[OpenIdConnectConstants.Claims.Name] = user.Firstname;
+                claims[OpenIdConnectConstants.Claims.FamilyName] = user.Lastname;
             }
 
             if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIddictConstants.Scopes.Roles))
