@@ -63,8 +63,7 @@ namespace WebApp.API.Controllers
         }
 
         // POST: /Account/ChangePassword
-        [HttpPostAttribute("changePassword")]
-        [Authorize]
+        [HttpPost("changePassword")]
         public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -109,7 +108,7 @@ namespace WebApp.API.Controllers
         // POST: /Account/ResetPassword
         [HttpPost("resetPassword")]
         [AllowAnonymous]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -118,13 +117,13 @@ namespace WebApp.API.Controllers
             var user = await _userManager.FindByNameAsync(model.Email);
             if (user == null)
             {
-                return Ok("Password reseted successfully!");
+                return Ok("Your password has been reset successfully!");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
-                return Ok("Password reseted successfully!");
+                return Ok("Your password has been reset successfully!");
             }
 
             AddErrors(result);
@@ -144,8 +143,7 @@ namespace WebApp.API.Controllers
 
         //Old methods
 
-        [Authorize(ActiveAuthenticationSchemes = OAuthValidationDefaults.AuthenticationScheme)]
-        [HttpGet, Produces("application/json")]
+        [HttpGet("userinfo")]
         public async Task<IActionResult> Userinfo()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -166,13 +164,11 @@ namespace WebApp.API.Controllers
             if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIdConnectConstants.Scopes.Email))
             {
                 claims[OpenIdConnectConstants.Claims.Email] = user.Email;
-                claims[OpenIdConnectConstants.Claims.EmailVerified] = user.EmailConfirmed;
             }
 
             if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIdConnectConstants.Scopes.Phone))
             {
                 claims[OpenIdConnectConstants.Claims.PhoneNumber] = user.PhoneNumber;
-                claims[OpenIdConnectConstants.Claims.PhoneNumberVerified] = user.PhoneNumberConfirmed;
             }
 
             if (User.HasClaim(OpenIdConnectConstants.Claims.Scope, OpenIddictConstants.Scopes.Roles))
