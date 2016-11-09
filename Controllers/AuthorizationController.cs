@@ -141,15 +141,11 @@ namespace WebApp.API.Controllers
                 OpenIdConnectConstants.Scopes.Email,
                 OpenIdConnectConstants.Scopes.Profile,
                 OpenIdConnectConstants.Scopes.OfflineAccess,
+                OpenIdConnectConstants.Scopes.Phone,
                 OpenIddictConstants.Scopes.Roles
             }.Intersect(request.GetScopes()));
 
             return ticket;
-        }
-
-        private Task<ApplicationUser> GetCurrentUserAsync()
-        {
-            return _userManager.GetUserAsync(HttpContext.User);
         }
     }
 }
