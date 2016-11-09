@@ -56,7 +56,7 @@ namespace WebApp.API.Controllers
                     Firstname = model.Firstname,
                     Lastname = model.Lastname
                 };
-                
+
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -108,8 +108,9 @@ namespace WebApp.API.Controllers
                     string emailBody = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>";
                     await _emailSender.SendEmailAsync(model.Email, "Reset Password", emailBody);
                 }
+                return Ok("Email to reset your password was sent!");
             }
-            return Ok("Email to reset your password was sent!");
+            return BadRequest(ModelState);
         }
 
         // POST: /Account/ResetPassword
