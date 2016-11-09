@@ -103,7 +103,7 @@ namespace WebApp.API.Controllers
                 {
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
                     //TODO: Move to service/generator
-                    string callbackUrl = GenerateResetUrl(user.Id, code);
+                    string callbackUrl = GenerateResetUrl(code);
                     //TODO: Move to service/generator
                     string emailBody = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>";
                     await _emailSender.SendEmailAsync(model.Email, "Reset Password", emailBody);
@@ -138,13 +138,13 @@ namespace WebApp.API.Controllers
             return BadRequest(ModelState);
         }
 
-        private string GenerateResetUrl(string userId, string code)
+        private string GenerateResetUrl(string code)
         {
             UriBuilder uriBuilder = new UriBuilder();
             uriBuilder.Scheme = "http";
             uriBuilder.Host = "webapp.com";
             uriBuilder.Path = "resetPassword";
-            uriBuilder.Query = $"userId={userId}&code={code}";
+            uriBuilder.Query = $"code={code}";
             var callbackUrl = uriBuilder.Uri.ToString();
             return callbackUrl;
         }
