@@ -8,19 +8,7 @@ public class CustomExceptionFilter : IExceptionFilter
     public void OnException(ExceptionContext context)
     {
         HttpStatusCode status = HttpStatusCode.InternalServerError;
-        string message = string.Empty;
-
-        var exceptionType = context.Exception.GetType();
-        if (exceptionType == typeof(UnauthorizedAccessException))
-        {
-            message = "Unauthorized Access";
-            status = HttpStatusCode.Unauthorized;
-        }
-        else
-        {
-            message = context.Exception.Message;
-        }
-
+        string message = context.Exception.Message;
         HttpResponse response = context.HttpContext.Response;
         response.StatusCode = (int)status;
         response.ContentType = "application/json";

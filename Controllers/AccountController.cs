@@ -36,6 +36,7 @@ namespace WebApp.API.Controllers
 
         // POST: /Account/Register
         [HttpPost("register")]
+        [Produces("application/json")]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] RegisterViewModel model)
         {
@@ -52,7 +53,7 @@ namespace WebApp.API.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return Ok("Registration is successful");
+                    return Ok();
                 }
                 AddErrors(result);
             }
@@ -63,6 +64,7 @@ namespace WebApp.API.Controllers
 
         // POST: /Account/ChangePassword
         [HttpPost("changePassword")]
+        [Produces("application/json")]
         public async Task<IActionResult> ChangePassword([FromBody]ChangePasswordViewModel model)
         {
             if (ModelState.IsValid)
@@ -75,7 +77,7 @@ namespace WebApp.API.Controllers
                 IdentityResult result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    return Ok("Password was changed successfully");
+                    return Ok();
                 }
                 AddErrors(result);
             }
@@ -84,6 +86,7 @@ namespace WebApp.API.Controllers
             return BadRequest(ModelState);
         }
 
+        [Produces("application/json")]
         [HttpPost("forgotPassword")]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordViewModel model)
@@ -100,12 +103,13 @@ namespace WebApp.API.Controllers
                     string emailBody = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>";
                     await _emailSender.SendEmailAsync(model.Email, "Reset Password", emailBody);
                 }
-                return Ok("Email to reset your password was sent!");
+                return Ok();
             }
             return BadRequest(ModelState);
         }
 
         // POST: /Account/ResetPassword
+        [Produces("application/json")]
         [HttpPost("resetPassword")]
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordViewModel model)
@@ -117,28 +121,17 @@ namespace WebApp.API.Controllers
             var user = await _userManager.FindByNameAsync(model.Email);
             if (user == null)
             {
-                return Ok("Your password has been reset successfully!");
+                return Ok();
             }
 
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
             if (result.Succeeded)
             {
-                return Ok("Your password has been reset successfully!");
+                return Ok();
             }
 
             AddErrors(result);
             return BadRequest(ModelState);
-        }
-
-        private string GenerateResetUrl(string code)
-        {
-            UriBuilder uriBuilder = new UriBuilder();
-            uriBuilder.Scheme = "http";
-            uriBuilder.Host = "webapp.com";
-            uriBuilder.Path = "resetPassword";
-            uriBuilder.Query = $"code={code}";
-            var callbackUrl = uriBuilder.Uri.ToString();
-            return callbackUrl;
         }
 
         [HttpGet("userinfo")]
@@ -185,6 +178,19 @@ namespace WebApp.API.Controllers
 
             return Json(claims);
         }
+
+        private string GenerateResetUrl(string code)
+        {
+            UriBuilder uriBuilder = new UriBuilder();
+            uriBuilder.Scheme = "http";
+            uriBuilder.Host = "localhost";
+            uriBuilder.Port = 5555;
+            uriBuilder.Path = "resetPassword";
+            uriBuilder.Query = $"code={code}";
+            var callbackUrl = uriBuilder.Uri.ToString();
+            return callbackUrl;
+        }
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)

@@ -98,6 +98,8 @@ namespace WebApp.API
             app.UseApplicationInsightsRequestTelemetry();
             app.UseApplicationInsightsExceptionTelemetry();
 
+            app.UseOAuthValidation();
+
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
             app.UseOpenIddict();
