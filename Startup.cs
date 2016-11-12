@@ -98,7 +98,7 @@ namespace WebApp.API
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:5555").AllowAnyHeader());
+            app.UseCors(builder => builder.WithOrigins("http://localhost:5555").AllowAnyMethod().AllowAnyHeader());
 
             app.UseApplicationInsightsRequestTelemetry();
             app.UseApplicationInsightsExceptionTelemetry();
