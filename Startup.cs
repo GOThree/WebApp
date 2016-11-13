@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -79,15 +76,15 @@ namespace WebApp.API
                 // This method should only be used during development.
                 .AddEphemeralSigningKey();
 
-            services.AddMvc();
-
+            services.AddMvc(config => { config.Filters.Add(typeof(CustomExceptionFilter)); });
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.Configure<ClientSettings>(Configuration.GetSection("ClientSettings"));
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.AddTransient<IAccountService, AccountService>();
 
             services.AddCors();
         }
@@ -103,27 +100,12 @@ namespace WebApp.API
             app.UseApplicationInsightsRequestTelemetry();
             app.UseApplicationInsightsExceptionTelemetry();
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-                app.UseBrowserLink();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseStaticFiles();
+            app.UseOAuthValidation();
 
             // Add external authentication middleware below. To configure them please see https://go.microsoft.com/fwlink/?LinkID=532715
 
-            app.UseOAuthValidation();
-
             app.UseOpenIddict();
-
             app.UseMvcWithDefaultRoute();
-            app.UseWelcomePage();
         }
     }
 }
