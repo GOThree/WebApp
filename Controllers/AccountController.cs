@@ -18,18 +18,18 @@ namespace WebApp.API.Controllers
     public class AccountController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IAccountService _accountService;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
+            IAccountService accountService,
             IEmailSender emailSender,
             ILoggerFactory loggerFactory)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
+            _accountService = accountService;
             _emailSender = emailSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
         }
@@ -97,8 +97,7 @@ namespace WebApp.API.Controllers
                 if (user != null)
                 {
                     var code = await _userManager.GeneratePasswordResetTokenAsync(user);
-                    //TODO: Move to service/generator
-                    string callbackUrl = GenerateResetUrl(code);
+                    string callbackUrl = _accountService.GenerateResetUrl(code);
                     //TODO: Move to service/generator
                     string emailBody = $"Please reset your password by clicking here: <a href='{callbackUrl}'>link</a>";
                     await _emailSender.SendEmailAsync(model.Email, "Reset Password", emailBody);
@@ -177,18 +176,6 @@ namespace WebApp.API.Controllers
             // can be found here: http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
 
             return Json(claims);
-        }
-
-        private string GenerateResetUrl(string code)
-        {
-            UriBuilder uriBuilder = new UriBuilder();
-            uriBuilder.Scheme = "http";
-            uriBuilder.Host = "localhost";
-            uriBuilder.Port = 5555;
-            uriBuilder.Path = "resetPassword";
-            uriBuilder.Query = $"code={code}";
-            var callbackUrl = uriBuilder.Uri.ToString();
-            return callbackUrl;
         }
 
         private void AddErrors(IdentityResult result)

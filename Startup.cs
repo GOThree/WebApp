@@ -80,9 +80,11 @@ namespace WebApp.API
             services.AddApplicationInsightsTelemetry(Configuration);
 
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+            services.Configure<ClientSettings>(Configuration.GetSection("ClientSettings"));
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<IAccountService, AccountService>();
 
             services.AddCors();
         }
