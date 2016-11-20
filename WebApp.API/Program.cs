@@ -18,7 +18,7 @@ namespace WebApp.API
             var host = new WebHostBuilder()
                 .UseConfiguration(config)
                 .UseKestrel()
-                .UseContentRoot(Path.Combine(currentDirectory, "WebApp.API"))
+                .UseContentRoot(Path.Combine(currentDirectory))
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
