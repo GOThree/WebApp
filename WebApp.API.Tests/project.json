@@ -1,0 +1,34 @@
+{
+  "version": "1.0.0-*",
+  "testRunner": "xunit",
+  "dependencies": {
+    "WebApp.API": "1.0.0",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "xunit": "2.2.0-beta2-build3300",
+    "Moq": "4.6.38-alpha"
+  },
+  "frameworks": {
+    "netcoreapp1.0": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.0.1"
+        }
+      },
+      "imports": [
+        "dotnet5.6",
+        "portable-net45+win8"
+      ]
+    }
+  },
+  "buildOptions": {
+    "copyToOutput": {
+      "include": [
+        "xunit.runner.json"
+      ]
+    }
+  },
+  "tooling": {
+    "defaultNamespace": "WebApp.API.Tests"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "projects": [
+    "WebApp.API",
+    "WebApp.API.Tests"
+  ]
+}
