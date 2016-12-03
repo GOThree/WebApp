@@ -1,13 +1,13 @@
 using Xunit;
 using Moq;
 using Microsoft.AspNetCore.Identity;
-using WebApp.API.Models;
 using WebApp.API.Controllers;
 using WebApp.API.Services;
 using Microsoft.Extensions.Logging;
 using WebApp.API.Models.AccountViewModels;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.API.Models.Db;
 
 namespace WebApp.API.Tests.ControllerTests
 {
