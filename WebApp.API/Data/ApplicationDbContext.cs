@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OpenIddict;
-using WebApp.API.Models;
+using WebApp.API.Models.Db;
 
 namespace WebApp.API.Data
 {
@@ -18,5 +18,7 @@ namespace WebApp.API.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<Business> Businesses { get; set; }
     }
 }

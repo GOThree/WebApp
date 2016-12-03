@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using OpenIddict;
-using WebApp.API.Models;
 using WebApp.API.Models.AccountViewModels;
+using WebApp.API.Models.Db;
 using WebApp.API.Services;
 
 namespace WebApp.API.Controllers

@@ -1,18 +1,22 @@
 using Microsoft.Extensions.Options;
 
-public class AccountService : IAccountService
+namespace WebApp.API.Services
 {
-    private readonly ClientSettings _settings;
-
-    public AccountService(IOptions<ClientSettings> settings)
+    public class AccountService : IAccountService
     {
-        _settings = settings.Value;
-    }
+        private readonly ClientSettings _settings;
 
-    public string GenerateResetUrl(string code)
-    {
-        string clientUrl = _settings.BaseUrl;
-        string callbackUrl = $"{clientUrl}/resetPassword?code={code}";
-        return callbackUrl;
+        public AccountService(IOptions<ClientSettings> settings)
+        {
+            _settings = settings.Value;
+        }
+
+        public string GenerateResetUrl(string code)
+        {
+            string clientUrl = _settings.BaseUrl;
+            string callbackUrl = $"{clientUrl}/resetPassword?code={code}";
+            return callbackUrl;
+        }
     }
 }
+

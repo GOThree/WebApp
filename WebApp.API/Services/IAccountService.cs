@@ -1,4 +1,8 @@
-public interface IAccountService
+namespace WebApp.API.Services
 {
-    string GenerateResetUrl(string code);
+
+    public interface IAccountService
+    {
+        string GenerateResetUrl(string code);
+    }
 }

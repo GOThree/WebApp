@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OpenIddict;
-using WebApp.API.Models;
+using WebApp.API.Models.Db;
 
 namespace WebApp.API.Controllers
 {

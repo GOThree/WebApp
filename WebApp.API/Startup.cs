@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WebApp.API.Data;
-using WebApp.API.Models;
+using WebApp.API.Models.Db;
 using WebApp.API.Services;
 
 namespace WebApp.API
@@ -85,6 +85,9 @@ namespace WebApp.API
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<IAccountService, AccountService>();
+            services.AddTransient<IBusinessService, BusinessService>();
+            services.AddTransient<IBusinessRepository, BusinessRepository>();
+            services.AddTransient<IBusinessConverter, BusinessConverter>();
 
             services.AddCors();
         }
@@ -94,6 +97,14 @@ namespace WebApp.API
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            if (env.IsDevelopment())
+            {
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+                {
+                    serviceScope.ServiceProvider.GetService<ApplicationDbContext>().EnsureSeedData();
+                }
+            }
 
             app.UseCors(builder => builder.WithOrigins("http://localhost:5555").AllowAnyMethod().AllowAnyHeader());
 
