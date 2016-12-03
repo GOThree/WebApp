@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using WebApp.API.Models;
+using WebApp.API.Models.Db;
 
 public class FakeUserManager : UserManager<ApplicationUser>
 {
