@@ -21,5 +21,11 @@ namespace WebApp.API.Services
             List<Business> businesses = await _context.Businesses.ToListAsync();
             return businesses;
         }
+
+        public async Task<Business> GetByIdAsync(int id)
+        {
+            Business business = await _context.Businesses.FirstOrDefaultAsync(b => b.Id == id);
+            return business;
+        }
     }
 }

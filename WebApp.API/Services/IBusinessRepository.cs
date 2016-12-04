@@ -7,5 +7,6 @@ namespace WebApp.API.Services
     public interface IBusinessRepository
     {
         Task<List<Business>> GetAllAsync();
+        Task<Business> GetByIdAsync(int id);
     }
 }

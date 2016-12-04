@@ -10,10 +10,16 @@ namespace WebApp.API.Services
     {
         public List<BusinessResponse> ConvertToResponse(List<Business> dbBusinesses)
         {
-            List<BusinessResponse> result = dbBusinesses.Select(b => new BusinessResponse
+            List<BusinessResponse> result = dbBusinesses.Select(b => ConvertToResponse(b)).ToList();
+            return result;
+        }
+
+        public BusinessResponse ConvertToResponse(Business dbBusiness)
+        {
+            BusinessResponse result = new BusinessResponse
             {
-                Id = b.Id
-            }).ToList();
+                Id = dbBusiness.Id
+            };
             return result;
         }
     }

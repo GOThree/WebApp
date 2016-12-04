@@ -10,16 +10,25 @@ namespace WebApp.API.Services
     {
         private readonly IBusinessRepository _businessRepository;
         private readonly IBusinessConverter _businessConverter;
+
         public BusinessService(IBusinessRepository repository, IBusinessConverter converter)
         {
             _businessRepository = repository;
             _businessConverter = converter;
         }
+
         public async Task<List<BusinessResponse>> GetAllAsync()
         {
             List<Business> dbBusinesses = await _businessRepository.GetAllAsync();
             List<BusinessResponse> convertedBusinesses = _businessConverter.ConvertToResponse(dbBusinesses);
             return convertedBusinesses;
+        }
+
+        public async Task<BusinessResponse> GetByIdAsync(int id)
+        {
+            Business dbBusiness = await _businessRepository.GetByIdAsync(id);
+            BusinessResponse convertedBusiness = _businessConverter.ConvertToResponse(dbBusiness);
+            return convertedBusiness;
         }
     }
 }
