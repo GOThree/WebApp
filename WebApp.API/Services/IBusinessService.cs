@@ -8,5 +8,6 @@ namespace WebApp.API.Services
     public interface IBusinessService
     {
         Task<List<BusinessResponse>> GetAllAsync();
+        Task<BusinessResponse> GetByIdAsync(int id);
     }
 }

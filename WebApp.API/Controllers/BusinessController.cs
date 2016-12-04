@@ -25,5 +25,14 @@ namespace WebApp.API.Controllers
             List<BusinessResponse> businesses = await _businessService.GetAllAsync();
             return Ok(businesses);
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        [Produces("application/json")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            BusinessResponse business = await _businessService.GetByIdAsync(id);
+            return Ok(business);
+        }
     }
 }
