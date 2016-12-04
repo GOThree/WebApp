@@ -37,41 +37,29 @@ namespace WebApp.API.Controllers
                 var user = await _userManager.FindByNameAsync(request.Username);
                 if (user == null)
                 {
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The username/password couple is invalid."
-                    });
+                    ModelState.AddModelError(OpenIdConnectConstants.Errors.InvalidGrant, "The username/password couple is invalid.");
+                    return BadRequest(ModelState);
                 }
 
                 // Ensure the user is allowed to sign in.
                 if (!await _signInManager.CanSignInAsync(user))
                 {
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The specified user is not allowed to sign in."
-                    });
+                    ModelState.AddModelError(OpenIdConnectConstants.Errors.InvalidGrant, "The specified user is not allowed to sign in.");
+                    return BadRequest(ModelState);
                 }
 
                 // Reject the token request if two-factor authentication has been enabled by the user.
                 if (_userManager.SupportsUserTwoFactor && await _userManager.GetTwoFactorEnabledAsync(user))
                 {
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The specified user is not allowed to sign in."
-                    });
+                    ModelState.AddModelError(OpenIdConnectConstants.Errors.InvalidGrant, "The specified user is not allowed to sign in.");
+                    return BadRequest(ModelState);
                 }
 
                 // Ensure the user is not already locked out.
                 if (_userManager.SupportsUserLockout && await _userManager.IsLockedOutAsync(user))
                 {
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The username/password couple is invalid."
-                    });
+                    ModelState.AddModelError(OpenIdConnectConstants.Errors.InvalidGrant, "The username/password couple is invalid.");
+                    return BadRequest(ModelState);
                 }
 
                 // Ensure the password is valid.
@@ -82,11 +70,9 @@ namespace WebApp.API.Controllers
                         await _userManager.AccessFailedAsync(user);
                     }
 
-                    return BadRequest(new OpenIdConnectResponse
-                    {
-                        Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                        ErrorDescription = "The username/password couple is invalid."
-                    });
+                    ModelState.AddModelError(OpenIdConnectConstants.Errors.InvalidGrant, "The username/password couple is invalid.");
+                    return BadRequest(ModelState);
+
                 }
 
                 if (_userManager.SupportsUserLockout)
@@ -100,11 +86,8 @@ namespace WebApp.API.Controllers
                 return SignIn(ticket.Principal, ticket.Properties, ticket.AuthenticationScheme);
             }
 
-            return BadRequest(new OpenIdConnectResponse
-            {
-                Error = OpenIdConnectConstants.Errors.UnsupportedGrantType,
-                ErrorDescription = "The specified grant type is not supported."
-            });
+            ModelState.AddModelError(OpenIdConnectConstants.Errors.UnsupportedGrantType, "The specified grant type is not supported.");
+            return BadRequest(ModelState);
         }
 
         private async Task<AuthenticationTicket> CreateTicketAsync(OpenIdConnectRequest request, ApplicationUser user)

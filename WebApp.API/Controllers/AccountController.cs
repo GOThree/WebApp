@@ -138,11 +138,8 @@ namespace WebApp.API.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return BadRequest(new OpenIdConnectResponse
-                {
-                    Error = OpenIdConnectConstants.Errors.InvalidGrant,
-                    ErrorDescription = "The user profile is no longer available."
-                });
+                ModelState.AddModelError(OpenIdConnectConstants.Errors.InvalidGrant, "The user profile is no longer available.");
+                return BadRequest(ModelState);
             }
 
             var claims = new JObject();
