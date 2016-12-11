@@ -11,8 +11,8 @@ namespace WebApp.API.Data
             {
 
                 context.Businesses.AddRange(
-                    new Business(),
-                    new Business()
+                    new Business() { Name = "Business 1" },
+                    new Business() { Name = "Business 2" }
                 );
 
                 context.SaveChanges();
