@@ -1,13 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace WebApp.API.Models.Db
+namespace WebApp.API.Models.Input
 {
-    public class Business
+    public class BusinessRequest
     {
-        [Key]
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
     }
 }
-
