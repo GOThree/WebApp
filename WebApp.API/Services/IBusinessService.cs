@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using WebApp.API.Models.Input;
 using WebApp.API.Models.Output;
 
 namespace WebApp.API.Services
@@ -9,5 +10,6 @@ namespace WebApp.API.Services
     {
         Task<List<BusinessResponse>> GetAllAsync();
         Task<BusinessResponse> GetByIdAsync(int id);
+        Task<BusinessResponse> CreateAsync(CreateBusinessRequest model);
     }
 }

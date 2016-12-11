@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebApp.API.Models.Db;
+using WebApp.API.Models.Input;
 using WebApp.API.Models.Output;
 
 namespace WebApp.API.Services
@@ -28,6 +29,14 @@ namespace WebApp.API.Services
         {
             Business dbBusiness = await _businessRepository.GetByIdAsync(id);
             BusinessResponse convertedBusiness = _businessConverter.ConvertToResponse(dbBusiness);
+            return convertedBusiness;
+        }
+
+        public async Task<BusinessResponse> CreateAsync(CreateBusinessRequest model)
+        {
+            Business dbBusinessModel = _businessConverter.CreateDbModel(model);
+            Business createdDbBusiness = await _businessRepository.CreateAsync(dbBusinessModel);
+            BusinessResponse convertedBusiness = _businessConverter.ConvertToResponse(createdDbBusiness);
             return convertedBusiness;
         }
     }
