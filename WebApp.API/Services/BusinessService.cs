@@ -32,11 +32,18 @@ namespace WebApp.API.Services
             return convertedBusiness;
         }
 
-        public async Task<BusinessResponse> CreateAsync(CreateBusinessRequest model)
+        public async Task<BusinessResponse> CreateAsync(BusinessRequest model)
         {
             Business dbBusinessModel = _businessConverter.CreateDbModel(model);
             Business createdDbBusiness = await _businessRepository.CreateAsync(dbBusinessModel);
             BusinessResponse convertedBusiness = _businessConverter.ConvertToResponse(createdDbBusiness);
+            return convertedBusiness;
+        }
+
+        public async Task<BusinessResponse> UpdateAsync(int id, BusinessRequest model)
+        {
+            Business updatedDbBusiness = await _businessRepository.UpdateAsync(id, model);
+            BusinessResponse convertedBusiness = _businessConverter.ConvertToResponse(updatedDbBusiness);
             return convertedBusiness;
         }
     }

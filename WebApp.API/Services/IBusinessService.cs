@@ -10,6 +10,7 @@ namespace WebApp.API.Services
     {
         Task<List<BusinessResponse>> GetAllAsync();
         Task<BusinessResponse> GetByIdAsync(int id);
-        Task<BusinessResponse> CreateAsync(CreateBusinessRequest model);
+        Task<BusinessResponse> CreateAsync(BusinessRequest model);
+        Task<BusinessResponse> UpdateAsync(int id, BusinessRequest model);
     }
 }

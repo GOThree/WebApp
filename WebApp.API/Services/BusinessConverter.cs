@@ -17,6 +17,11 @@ namespace WebApp.API.Services
 
         public BusinessResponse ConvertToResponse(Business dbBusiness)
         {
+            if (dbBusiness == null)
+            {
+                return null;
+            }
+
             BusinessResponse result = new BusinessResponse
             {
                 Id = dbBusiness.Id,
@@ -26,11 +31,11 @@ namespace WebApp.API.Services
             return result;
         }
 
-        public Business CreateDbModel(CreateBusinessRequest model)
+        public Business CreateDbModel(BusinessRequest model)
         {
             Business result = new Business
             {
-                Name = model.Name
+                Name = model?.Name
             };
 
             return result;
