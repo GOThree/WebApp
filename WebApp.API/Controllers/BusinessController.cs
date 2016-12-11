@@ -33,16 +33,45 @@ namespace WebApp.API.Controllers
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             BusinessResponse business = await _businessService.GetByIdAsync(id);
+            if (business == null)
+            {
+                return NotFound();
+            }
+
             return Ok(business);
         }
 
         [HttpPost]
         [Route("")]
         [Produces("application/json")]
-        public async Task<IActionResult> CreateAsync([FromBody] CreateBusinessRequest model)
+        public async Task<IActionResult> CreateAsync([FromBody] BusinessRequest model)
         {
-            BusinessResponse business = await _businessService.CreateAsync(model);
-            return CreatedAtRoute("GetBusinessById", new { id = business.Id }, business);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            BusinessResponse newBusiness = await _businessService.CreateAsync(model);
+            return CreatedAtRoute("GetBusinessById", new { id = newBusiness.Id }, newBusiness);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        [Produces("application/json")]
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] BusinessRequest model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            BusinessResponse updatedBusiness = await _businessService.UpdateAsync(id, model);
+            if (updatedBusiness == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(updatedBusiness);
         }
     }
 }

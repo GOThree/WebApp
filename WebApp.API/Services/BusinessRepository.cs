@@ -19,7 +19,7 @@ namespace WebApp.API.Services
 
         public async Task<Business> CreateAsync(Business newBusiness)
         {
-            var createdBusiness =  _context.Businesses.Add(newBusiness);
+            var createdBusiness = _context.Businesses.Add(newBusiness);
             await _context.SaveChangesAsync();
             return createdBusiness.Entity;
         }
@@ -33,6 +33,19 @@ namespace WebApp.API.Services
         public async Task<Business> GetByIdAsync(int id)
         {
             Business business = await _context.Businesses.FirstOrDefaultAsync(b => b.Id == id);
+            return business;
+        }
+
+        public async Task<Business> UpdateAsync(int id, BusinessRequest updatedBusiness)
+        {
+            Business business = await _context.Businesses.FirstOrDefaultAsync(b => b.Id == id);
+            if (business == null)
+            {
+                return null;
+            }
+            business.Name = updatedBusiness.Name;
+            await _context.SaveChangesAsync();
+
             return business;
         }
     }

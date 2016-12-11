@@ -9,6 +9,6 @@ namespace WebApp.API.Services
     {
         List<BusinessResponse> ConvertToResponse(List<Business> dbBusinesses);
         BusinessResponse ConvertToResponse(Business dbBusiness);
-        Business CreateDbModel(CreateBusinessRequest model);
+        Business CreateDbModel(BusinessRequest model);
     }
 }
