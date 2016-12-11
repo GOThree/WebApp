@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using WebApp.API.Models.Db;
+using WebApp.API.Models.Input;
 using WebApp.API.Models.Output;
 
 namespace WebApp.API.Services
@@ -18,8 +19,20 @@ namespace WebApp.API.Services
         {
             BusinessResponse result = new BusinessResponse
             {
-                Id = dbBusiness.Id
+                Id = dbBusiness.Id,
+                Name = dbBusiness.Name
             };
+
+            return result;
+        }
+
+        public Business CreateDbModel(CreateBusinessRequest model)
+        {
+            Business result = new Business
+            {
+                Name = model.Name
+            };
+
             return result;
         }
     }

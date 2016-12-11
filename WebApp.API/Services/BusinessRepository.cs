@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApp.API.Data;
 using WebApp.API.Models.Db;
+using WebApp.API.Models.Input;
 
 namespace WebApp.API.Services
 {
@@ -14,6 +15,13 @@ namespace WebApp.API.Services
         public BusinessRepository(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Business> CreateAsync(Business newBusiness)
+        {
+            var createdBusiness =  _context.Businesses.Add(newBusiness);
+            await _context.SaveChangesAsync();
+            return createdBusiness.Entity;
         }
 
         public async Task<List<Business>> GetAllAsync()

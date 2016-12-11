@@ -8,5 +8,6 @@ namespace WebApp.API.Services
     {
         Task<List<Business>> GetAllAsync();
         Task<Business> GetByIdAsync(int id);
+        Task<Business> CreateAsync(Business newBusiness);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.API.Models.Input;
 using WebApp.API.Models.Output;
 using WebApp.API.Services;
 
@@ -27,12 +28,21 @@ namespace WebApp.API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id}", Name = "GetBusinessById")]
         [Produces("application/json")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             BusinessResponse business = await _businessService.GetByIdAsync(id);
             return Ok(business);
+        }
+
+        [HttpPost]
+        [Route("")]
+        [Produces("application/json")]
+        public async Task<IActionResult> CreateAsync([FromBody] CreateBusinessRequest model)
+        {
+            BusinessResponse business = await _businessService.CreateAsync(model);
+            return CreatedAtRoute("GetBusinessById", new { id = business.Id }, business);
         }
     }
 }
