@@ -8,7 +8,7 @@ using WebApp.API.Services;
 
 namespace WebApp.API.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("businesses")]
     public class BusinessController : Controller
     {
