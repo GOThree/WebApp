@@ -38,7 +38,13 @@ namespace WebApp.API
         {
             // Add framework services.
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
+                // Register the entity sets needed by OpenIddict.
+                // Note: use the generic overload if you need
+                // to replace the default OpenIddict entities.
+                options.UseOpenIddict();
+            });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(o =>
                 {
@@ -55,7 +61,9 @@ namespace WebApp.API
             var accessTokenLifetime = Configuration.GetValue<double>("AuthSettings:AccessTokenLifetime");
             var refreshTokenLifetime = Configuration.GetValue<double>("AuthSettings:RefreshTokenLifetime");
             // Register the OpenIddict services, including the default Entity Framework stores.
-            services.AddOpenIddict<ApplicationDbContext>()
+            services.AddOpenIddict()
+                // Register the Entity Framework stores.
+                .AddEntityFrameworkCoreStores<ApplicationDbContext>()
                 // Register the ASP.NET Core MVC binder used by OpenIddict.
                 // Note: if you don't call this method, you won't be able to
                 // bind OpenIdConnectRequest or OpenIdConnectResponse parameters.
