@@ -53,6 +53,7 @@ namespace WebApp.API
                 .AddDefaultTokenProviders();
 
             var accessTokenLifetime = Configuration.GetValue<double>("AuthSettings:AccessTokenLifetime");
+            var refreshTokenLifetime = Configuration.GetValue<double>("AuthSettings:RefreshTokenLifetime");
             // Register the OpenIddict services, including the default Entity Framework stores.
             services.AddOpenIddict<ApplicationDbContext>()
                 // Register the ASP.NET Core MVC binder used by OpenIddict.
@@ -68,6 +69,7 @@ namespace WebApp.API
                 .AllowPasswordFlow()
                 .AllowRefreshTokenFlow()
                 .SetAccessTokenLifetime(TimeSpan.FromMinutes(accessTokenLifetime))
+                .SetRefreshTokenLifetime(TimeSpan.FromDays(refreshTokenLifetime))
 
                 // During development, you can disable the HTTPS requirement.
                 .DisableHttpsRequirement()
