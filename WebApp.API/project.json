@@ -6,6 +6,7 @@
       "type": "platform"
     },
     "OpenIddict": "1.0.0-*",
+    "OpenIddict.EntityFrameworkCore": "1.0.0-*",
     "OpenIddict.Mvc": "1.0.0-*",
     "MimeKit": "1.10.0",
     "MailKit": "1.10.0",
